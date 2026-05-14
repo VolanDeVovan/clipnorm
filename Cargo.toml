@@ -1,0 +1,41 @@
+[package]
+name = "clipnorm"
+version = "0.1.0"
+edition = "2021"
+description = "Watch the Wayland clipboard, save image-only entries to disk, republish multi-MIME so the path pastes into TUI agents like Claude Code"
+license = "MIT"
+repository = "https://github.com/VolanDeVovan/clipnorm"
+homepage = "https://github.com/VolanDeVovan/clipnorm"
+readme = "README.md"
+keywords = ["wayland", "clipboard", "claude-code", "tui", "screenshot"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+wayland-clipboard-listener = "0.6"
+wl-clipboard-rs = "0.9"
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+[[bin]]
+name = "clipnorm"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+strip = true
+
+# cargo-dist: Linux-only release pipeline (Wayland-only binary; nothing to ship
+# elsewhere). musl gives a static binary that runs on any distro without glibc
+# surprises. Single-crate project, so we keep dist config under [workspace.*]
+# anchored at this Cargo.toml — that's what cargo-dist expects.
+[workspace.metadata.dist]
+cargo-dist-version = "0.31.0"
+ci = "github"
+installers = ["shell"]
+targets = [
+    "x86_64-unknown-linux-musl",
+    "aarch64-unknown-linux-musl",
+]
+unix-archive = ".tar.xz"
+install-path = "~/.local/bin"

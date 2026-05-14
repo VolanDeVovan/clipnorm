@@ -1,0 +1,13 @@
+[Unit]
+Description=Wayland clipboard image normalizer (clipnorm)
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+ExecStart=%h/.local/bin/clipnorm
+Restart=on-failure
+RestartSec=5
+MemoryMax=256M
+
+[Install]
+WantedBy=graphical-session.target
