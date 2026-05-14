@@ -58,7 +58,7 @@ dependencies = [
 
 [[package]]
 name = "clipnorm"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "chrono",
  "wayland-clipboard-listener",

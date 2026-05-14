@@ -1,6 +1,6 @@
 [package]
 name = "clipnorm"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Watch the Wayland clipboard, save image-only entries to disk, republish multi-MIME so the path pastes into TUI agents like Claude Code"
 license = "MIT"
@@ -25,6 +25,11 @@ lto = true
 codegen-units = 1
 strip = true
 
+# cargo-dist builds with this profile.
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
 # cargo-dist: Linux-only release pipeline (Wayland-only binary; nothing to ship
 # elsewhere). musl gives a static binary that runs on any distro without glibc
 # surprises. Single-crate project, so we keep dist config under [workspace.*]
@@ -37,5 +42,7 @@ targets = [
     "x86_64-unknown-linux-musl",
     "aarch64-unknown-linux-musl",
 ]
-unix-archive = ".tar.xz"
+# .tar.gz instead of .tar.xz so the installer works on minimal containers
+# without needing xz-utils preinstalled (gzip is universally available).
+unix-archive = ".tar.gz"
 install-path = "~/.local/bin"
